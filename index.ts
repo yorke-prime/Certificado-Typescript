@@ -1,36 +1,80 @@
-function soma(a: number, b: number) {
-    return a + b;
+const input = document.getElementById("input") as HTMLInputElement;
+
+input.addEventListener("input", (event) => {
+    const i = event.currentTarget as HTMLInputElement;
+
+    console.log(i.value);
+});
+
+// Generic Types
+
+function adiconarApendiceALista<T>(array: T[], valor: T) {
+    return array.map(() => valor);
 }
 
+adiconarApendiceALista([1,2,34,], 1);
 
-/* interface IAnimal {
-    nome: string;
-    type: "terrestre" | "aquatico";
-    rugido(altura): void;
+interface IUsuario {
+    id: string;
+    email: string;
+    cargo?: "normal" | "gerente" | "coordenador" | "supervisor";
+}
+
+/* interface IAdmin extends IUsuario {
+    cargo: "gerente" | "coordenador" | "supervisor";
 } */
 
-type IAnimal = {
+function redirecionar(usuario: IUsuario ) {
+    if(usuario.cargo) {
+        console.log("area de adiministração");
+    }else {
+        console.log("area de usuario");
+    }
+}
+
+// variaveis com propriedade readonly e private
+
+interface ICachorro {
     nome: string;
-    type: "terrestre" | "aquatico";
-    domestico: boolean;
-    // rugido(altura): void;
+    idade: number;
+    parqueFavorito?: string;
 }
 
-interface ICanino extends IAnimal {
-    porte: "pequeno" | "medio" | "grande"
+type ICachorroLeitura = {
+    +readonly [k in keyof ICachorro]-?: ICachorro[k];
 }
 
-interface IFelino extends IAnimal {
-    visãoNoturna: boolean;
+const meuCachorro: ICachorro = {
+    nome: "lek",
+    idade: 5,
 }
 
-type Itest = ICanino | IFelino;
+class MeuCachorro implements ICachorroLeitura {
+    idade;
+    nome;
+    parqueFavorito;
 
-const animal: Itest = {
-    nome: "Baleia",
-    type: "aquatico",
-    domestico: true,
-    porte: "grande",
-    visãoNoturna: true
-    // rugido: (altura) => (`${altura}`)
-};
+    constructor(idade, nome, parqueFavorito) {
+        this.idade = idade;
+        this.nome = nome;
+        this.parqueFavorito = parqueFavorito;
+    }
+}
+
+const cao = new MeuCachorro(5, "lek", "jardim");
+
+cao.idade = 8;
+
+console.log(cao);
+
+// importações
+
+import $ from "jquery";
+
+$.fn.extend({
+    novaFuncao() {
+        console.log("chamou uma nova função");
+    }
+})
+
+$("body").novaFuncao();
